@@ -1,0 +1,75 @@
+import random
+
+# Function to print the Tic Tac Toe board
+def print_board(board):
+    for row in board:
+        print(" | ".join(row))
+        print("-" * 5)
+
+# Function to check if there are any available moves
+def available_moves(board):
+    return any(cell == ' ' for row in board for cell in row)
+
+# Function to check for a win condition
+def check_win(board, mark):
+    # Check rows, columns, and diagonals
+    for row in board:
+        if all(cell == mark for cell in row):
+            return True
+    for col in range(3):
+        if all(row[col] == mark for row in board):
+            return True
+    if all(board[i][i] == mark for i in range(3)) or all(board[i][2 - i] == mark for i in range(3)):
+        return True
+    return False
+
+# Function to get player move
+def get_player_move(board):
+    while True:
+        move = input("Enter your move (row and column): ").split()
+        if len(move) == 2 and all(i.isdigit() for i in move):
+            row, col = int(move[0]), int(move[1])
+            if 0 <= row < 3 and 0 <= col < 3 and board[row][col] == ' ':
+                return row, col
+        print("Invalid move. Try again.")
+
+# Function to get computer move (random)
+def get_computer_move(board):
+    available = [(r, c) for r in range(3) for c in range(3) if board[r][c] == ' ']
+    return random.choice(available)
+
+# Function to switch player
+def switch_player(current):
+    return 'O' if current == 'X' else 'X'
+
+# Main function to play the game
+def play_game():
+    board = [[' ' for _ in range(3)]]
+    current_player = 'X'
+    game_mode = input("Enter '1' for two-player mode or '2' to play against the computer: ")
+
+    while True:
+        print_board(board)
+        if game_mode == '1' or (game_mode == '2' and current_player == 'X'):
+            print(f"Player {current_player}'s turn.")
+            row, col = get_player_move(board)
+        else:
+            print(f"Computer's turn ({current_player}).")
+            row, col = get_computer_move(board)
+        
+        board[row][col] = current_player
+        
+        if check_win(board, current_player):
+            print_board(board)
+            print(f"Player {current_player} wins!")
+            break
+        
+        if not available_moves(board):
+            print_board(board)
+            print("It's a draw!")
+            break
+        
+        current_player = switch_player(current_player)
+
+# Start the game
+play_game()
