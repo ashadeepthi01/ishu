@@ -1,0 +1,28 @@
+import random
+import string
+
+# Function to generate a random password
+def generate_password(length):
+    if length < 1:
+        return "Password length must be at least 1"
+    
+    # Define the characters to use in the password
+    characters = string.ascii_letters + string.digits + string.punctuation
+    
+    # Generate the password
+    password = ''.join(random.choice(characters) for _ in range(length))
+    
+    return password
+
+# Main function to get user input and generate password
+def main():
+    try:
+        length = int(input("Enter the desired length of the password: "))
+        password = generate_password(length)
+        print(f"Generated password: {password}")
+    except ValueError:
+        print("Invalid input. Please enter a valid number.")
+
+# Run the main function
+if __name__ == "__main__":
+    main()
